@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<link rel="import" href="../air-cascade-validator-behaviour.html">
 
 <!--
 
@@ -28,6 +29,10 @@ The `air-cascade-validator` provides cascade validation for all nodes
 
         Polymer({
             is: 'air-cascade-validator',
+
+            behaviors: [
+                Polymer.AirCascadeValidatorBehavior
+            ],
 
             properties: {}
 
