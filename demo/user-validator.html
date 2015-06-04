@@ -1,0 +1,46 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="../../iron-icon/iron-icon.html">
+<link rel="import" href="../../iron-icons/iron-icons.html">
+
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+
+<link rel="import" href="../air-cascade-validator.html">
+
+<!--
+
+The `user-validator` provides  
+
+@group user-validator Elements
+@element user-validator
+@demo demo/index.html
+-->
+
+<dom-module id="user-validator">
+
+    <style>
+        :host {
+            display: block;
+        }
+    </style>
+    <template>
+       <air-cascade-validator>
+           <paper-input label="Firstname" value="{{data._source.firstname}}" required></paper-input>
+           <paper-input label="Lastname" value="{{data._source.lastname}}" required></paper-input>s
+       </air-cascade-validator>
+    </template>
+</dom-module>
+
+<script>
+    (function () {
+        'use strict';
+
+        Polymer({
+            is: 'user-validator',
+
+            properties: {}
+
+        });
+    })();
+</script>
