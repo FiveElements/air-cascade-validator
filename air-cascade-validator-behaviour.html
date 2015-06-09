@@ -9,7 +9,7 @@
         properties: {},
 
         listeners: {
-            'iron-form-element-register': '_registerElement'
+            'iron-form-element-register': '_registerValidateElement'
         },
 
 
@@ -17,21 +17,21 @@
         // --- ---------------------------
         ready: function () {
             // Holds all the custom elements registered with this form.
-            this._customElements = [];
+            this._validateElements = [];
         },
 
         // --- Node Watcher
         // --- ---------------------------
-        _registerElement: function (e) {
+        _registerValidateElement: function (e) {
             if (this !== e.target) {
-                this._customElements.push(e.target);
+                this._validateElements.push(e.target);
             }
         },
 
         // --- Validators
         // --- ---------------------------
         _validateAllNodes: function (notValidNodesCallback) {
-            var childNodes = this._customElements;
+            var childNodes = this._validateElements;
             // Compute InValid nodes
             var notValidNodes = Array.prototype.filter.call(childNodes, function (childNode) {
                 if (typeof childNode.checkValidity === 'function') {
