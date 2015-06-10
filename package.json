@@ -1,0 +1,32 @@
+{
+  "name": "air-cascade-validator",
+  "version": "0.0.1",
+  "description": "Air cascade validator",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test:local"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FiveElements/air-cascade-validator.git"
+  },
+  "keywords": [
+    "validator",
+    "polymer"
+  ],
+  "author": "Five Elements Author",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FiveElements/air-cascade-validator/issues"
+  },
+  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.0",
+    "jshint-stylish": "^2.0.0",
+    "web-component-tester": "^3.1.7"
+  }
+}
