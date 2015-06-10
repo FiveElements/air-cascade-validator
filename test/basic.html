@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body>
 
 <test-fixture id="Basic">
-    <template>
+    <template is="dom-template">
         <air-cascade-validator>
             <paper-input label="Firstname" bind-value="Toto" required></paper-input>
             <paper-input label="Lastname" bind-value="{{lastname}}" required></paper-input>
@@ -55,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             assert.isFalse(f.validate(), 'Lastname should be not valid');
         });
         test('Valid', function() {
-            var f = fixture('Basic', {lastname: 'ohai thurr'}); 
+            var f = fixture('Basic', {lastname: 'ohai thurr'});
             assert.isTrue(f.validate(), 'Lastname should be valid');
         });
     });
