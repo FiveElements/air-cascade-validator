@@ -5,6 +5,9 @@ var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 
+var browserSync = require('browser-sync');
+
+
 // Lint JavaScript
 gulp.task('jshint', function () {
     return gulp.src([
@@ -14,6 +17,24 @@ gulp.task('jshint', function () {
         .pipe(jshint.extract()) // Extract JS from .html files
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish')) ;
+});
+
+// Watch Files For Changes & Reload
+gulp.task('serve',   function () {
+    // browserSync Server
+    // ------------------
+    browserSync({
+        notify: true,
+        // Run as an https by uncommenting 'https: true'
+        // Note: this uses an unsigned certificate which on first access
+        //       will present a certificate warning in the browser.
+        // https: true,
+        server: {
+            baseDir: ['../.'],
+            directory: true
+        }
+    });
+
 });
 
 
