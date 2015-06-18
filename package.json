@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/FiveElements/air-cascade-validator#readme",
   "devDependencies": {
+    "browser-sync": "^2.7.7",
     "gulp": "^3.9.0",
     "gulp-jshint": "^1.11.0",
     "jshint-stylish": "^2.0.0",
