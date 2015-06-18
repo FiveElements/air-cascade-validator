@@ -10,8 +10,9 @@
   "keywords": [
     "web-components",
     "polymer",
-    "validator",
-    "air-elements"
+    "five-elements",
+    "air-elements",
+    "validator"
   ],
   "ignore": [
     "/.*",

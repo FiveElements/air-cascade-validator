@@ -14,8 +14,11 @@
     "url": "git+https://github.com/FiveElements/air-cascade-validator.git"
   },
   "keywords": [
-    "validator",
-    "polymer"
+    "web-components",
+    "polymer",
+    "five-elements",
+    "air-elements",
+    "validator"
   ],
   "author": "Five Elements Author",
   "license": "ISC",

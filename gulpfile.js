@@ -7,12 +7,10 @@ var stylish = require('jshint-stylish');
 
 var browserSync = require('browser-sync');
 
-
-
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DEFAULT FOR 'gulp' COMMAND
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 // Lint JavaScript
 gulp.task('jshint', function () {
     return gulp.src([
@@ -23,8 +21,7 @@ gulp.task('jshint', function () {
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish')) ;
 });
-
-
+ 
 gulp.task('default', ['test:local']);
 gulp.task('test', ['test:local']);
 
