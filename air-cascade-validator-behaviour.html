@@ -15,7 +15,8 @@
         properties: {},
 
         listeners: {
-            'iron-form-element-register': '_registerValidateElement'
+            'iron-form-element-register': '_registerValidateElement',
+            'iron-form-element-unregister': '_unregisterValidateElement'
         },
 
 
@@ -29,10 +30,22 @@
         // --- Node Watcher
         // --- ---------------------------
         _registerValidateElement: function (e) {
+            // ??   e.target._parentForm = this;
             if (this !== e.target) {
                 this._validateElements.push(e.target);
             }
         },
+
+        _unregisterValidateElement: function(e) {
+            var target = e.detail.target;
+            if (target) {
+                var index = this._validateElements.indexOf(target);
+                if (index > -1) {
+                    this._validateElements.splice(index, 1);
+                }
+            }
+        },
+
 
         // --- Validators
         // --- ---------------------------
