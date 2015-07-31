@@ -7,7 +7,7 @@ var stylish = require('jshint-stylish');
 
 var browserSync = require('browser-sync');
 
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // DEFAULT FOR 'gulp' COMMAND
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -1,18 +1,12 @@
 {
   "name": "air-cascade-validator",
+  "private": true,
   "version": "0.0.1",
-  "description": "Air cascade validator",
-  "main": "gulpfile.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "test:local"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FiveElements/air-cascade-validator.git"
-  },
+  "description": "A Polymer element that manage Validation Aggregation",
+  "main": "air-cascade-validator.html",
+  "author": [
+    "The Five Elements Authors"
+  ],
   "keywords": [
     "web-components",
     "polymer",
@@ -20,17 +14,25 @@
     "air-elements",
     "validator"
   ],
-  "author": "Five Elements Author",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/FiveElements/air-cascade-validator/issues"
+  "ignore": [
+    "/.*",
+    ".*",
+    "package.json",
+    "gulpfile.js"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.0.0"
   },
-  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme",
   "devDependencies": {
-    "browser-sync": "^2.7.7",
-    "gulp": "^3.9.0",
-    "gulp-jshint": "^1.11.0",
-    "jshint-stylish": "^2.0.0",
-    "web-component-tester": "^3.1.7"
+    "test-fixture": "polymerelements/test-fixture#^1.0.0",
+    "iron-component-page": "polymerelements/iron-component-page#^1.0.0",
+    "web-component-tester": "*",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0",
+    "paper-input": "PolymerElements/paper-input#^1.0.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.0",
+    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
+    "iron-icon": "PolymerElements/iron-icon#~1.0.0",
+    "iron-icons": "PolymerElements/iron-icons#~1.0.1",
+    "paper-toast": "PolymerElements/paper-toast#~1.0.0"
   }
 }
