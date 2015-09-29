@@ -30,7 +30,7 @@
         // --- Node Watcher
         // --- ---------------------------
         _registerValidateElement: function (e) {
-            // ??   e.target._parentForm = this;
+            e.target._parentForm = this;
             if (this !== e.target) {
                 this._validateElements.push(e.target);
             }
