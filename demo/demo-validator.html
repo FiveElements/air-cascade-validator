@@ -61,7 +61,9 @@ The `user-validator` provides
             },
 
             validate: function () {
-                this.isValid = this.$.form.validate();
+                var isValid = this.$.form.validate();
+                this.isValid = isValid;
+                return isValid;
             }
 
         });
