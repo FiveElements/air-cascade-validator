@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "polymer serve -p 8080 | npm run watch",
     "watch": "browser-sync start --proxy localhost:8080 --startPath /components/air-cascade-validator/demo/ --files *.html,*.js,demo/*",
-    "test": "test:local"
+    "test": "polymer test"
   },
   "repository": {
     "type": "git",
