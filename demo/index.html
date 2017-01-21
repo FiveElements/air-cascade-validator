@@ -1,33 +1,49 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>air-cascade-validator demos</title>
+    <title>air-cascade-validator demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+
+
     <link rel="import" href="../air-cascade-validator.html">
-    <link rel="import" href="demo-validator.html">
+    <link rel="import" href="demo-editor.html">
+    <link rel="import" href="demo-control.html">
 
+    <link rel="import" href="../../paper-input/paper-input.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
 
-    <link rel="import" href="../../paper-styles/classes/typography.html">
-    <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-    <link rel="stylesheet" href="../../paper-styles/demo.css">
-
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
 </head>
 <body>
+<div class="vertical-section-container centered">
+    <h3>Basic air-cascade-validator demo</h3>
+    <demo-snippet>
+        <template is="dom-bind" id="demo">
+            <demo-control  onclick="validate()" is-valid="[[isValid]]" ></demo-control>
 
-<template is="dom-bind">
-    <h1>Cascade Validation</h1>
+            <air-cascade-validator id="validator">
+                <demo-editor data="{{data}}"></demo-editor>
+            </air-cascade-validator>
+        </template>
 
-    <div class="horizontal center-center layout">
-        <div>
-            <h4>Validation Form</h4>
-            <div class="horizontal-section">
-                <demo-validator></demo-validator>
-            </div>
-        </div>
+        <script>
+            var demo = document.querySelector('#demo');
+            demo.isValid = true;
 
-</template>
-
+            function validate() {
+               var isValid = document.getElementById('validator').validate();
+                demo.isValid = isValid;
+            }
+        </script>
+    </demo-snippet>
+</div>
 </body>
 </html>

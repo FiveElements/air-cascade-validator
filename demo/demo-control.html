@@ -1,0 +1,40 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+
+<!--
+`demo-control`
+Polymer Element demo-control
+
+@demo demo/index.html 
+-->
+
+<dom-module id="demo-control">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <paper-button onclick="validate()">
+            <iron-icon icon="save"></iron-icon>
+            <span>Validate</span> is valid: <span>[[isValid]]</span>
+        </paper-button>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'demo-control',
+
+            properties: {
+                isValid: {
+                    type: Boolean
+                },
+            },
+
+        });
+    </script>
+</dom-module>

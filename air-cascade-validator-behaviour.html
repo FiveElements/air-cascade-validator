@@ -24,33 +24,109 @@
         // --- ---------------------------
         ready: function () {
             // Holds all the custom elements registered with this form.
-            this._validateElements = [];
+            this._customElements = [];
         },
 
         // --- Node Watcher
         // --- ---------------------------
         _registerValidateElement: function (e) {
-            e.target._parentForm = this;
-            if (this !== e.target) {
-                this._validateElements.push(e.target);
-            }
+            // Get the actual element that fired the event
+            var element = Polymer.dom(e).rootTarget;
+
+            element._parentForm = this;
+//            if (this !== element) {
+                this._customElements.push(element);
+//            }
         },
 
         _unregisterValidateElement: function(e) {
             var target = e.detail.target;
             if (target) {
-                var index = this._validateElements.indexOf(target);
+                var index = this._customElements.indexOf(target);
                 if (index > -1) {
-                    this._validateElements.splice(index, 1);
+                    this._customElements.splice(index, 1);
                 }
             }
         },
 
-
-        // --- Validators
+        // --- Public Api
         // --- ---------------------------
+        validate: function (callback) {
+//            return this._validateAllNodes(callback);
+            return this._validate();
+        },
+
+
+        // --- Validators iron-form
+        // --- ---------------------------
+        /**
+         * Validates all the required elements (custom and *NOT* native) in the form.
+         * @return {boolean} True if all the elements are valid.
+         */
+        _validate: function () {
+            var valid = true;
+            // Validate all the custom elements.
+            var validatable;
+            for (var el, i = 0; el = this._customElements[i], i < this._customElements.length; i++) {
+                if (!this._isChildOfRegisteredParent(el, false) && !el.disabled) {
+                    validatable = /** @type {{validate: (function() : boolean)}} */ (el);
+                    // Some elements may not have correctly defined a validate method.
+                    if (validatable.validate)
+                        valid = !!validatable.validate() && valid;
+                }
+            }
+            // Validate the form's native elements.
+            if (this.elements) {
+                valid = this._validateNativeElements(this.elements) && valid;
+            }
+            return valid;
+        },
+
+        _validateNativeElements: function (elements) {
+            var valid = true;
+            for (var el, i = 0; el = this.elements[i], i < this.elements.length; i++) {
+                // If this native element is inside a custom element that has already
+                // registered to this form, skip it.
+                if (this._isChildOfRegisteredParent(el, false)) {
+                    continue;
+                }
+                // Custom elements that extend a native element will also appear in
+                // this list, but they've already been validated.
+                if (!el.hasAttribute('is') && el.willValidate && el.checkValidity) {
+                    valid = el.checkValidity() && valid;
+                }
+            }
+            return valid;
+        },
+
+
+        /**
+         * Returns true if `node` is in the shadow DOM of a different element,
+         * that has also implemented IronFormElementBehavior and is registered
+         * to this form. The second parameter specifies if the parent must have a
+         * name to be considered.
+         */
+        _isChildOfRegisteredParent: function(node, checkHasName) {
+            var parent = node;
+            // At some point going up the tree we'll find either this form or the document.
+            while (parent && parent !== document && parent != this) {
+                // Use logical parentnode, or native ShadowRoot host.
+                parent = Polymer.dom(parent).parentNode || parent.host;
+                // Check if the parent was registered and submittable.
+                if (parent &&
+                        (!checkHasName || parent.name) &&
+                        parent._parentForm === this) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        // --- Validators Simple
+        // --- ---------------------------
+
         _validateAllNodes: function (notValidNodesCallback) {
-            var childNodes = this._validateElements;
+            var childNodes = this._customElements;
             // Compute InValid nodes
             var notValidNodes = Array.prototype.filter.call(childNodes, function (childNode) {
                 if (typeof childNode.checkValidity === 'function') {
@@ -68,9 +144,6 @@
             return notValidNodes.length < 1;
         },
 
-        validate: function (callback) {
-            return this._validateAllNodes(callback);
-        }
 
         // --- End
         // --- ---------------------------

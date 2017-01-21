@@ -1,0 +1,44 @@
+<link rel="import" href="../../polymer/polymer.html">
+
+<link rel="import" href="../../paper-input/paper-input.html">
+<link rel="import" href="../../paper-button/paper-button.html">
+
+<!--
+`demo-editor`
+Polymer Element demo-editor
+
+@demo demo/index.html 
+-->
+
+<dom-module id="demo-editor">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <paper-input label="Firstname" value="{{data.firstname}}" required></paper-input>
+        <paper-input label="Lastname" value="{{data.lastname}}" required></paper-input>
+        <paper-input label="email" value="{{data.email}}" type="email"></paper-input>
+    </template>
+
+    <script>
+        Polymer({
+
+            is: 'demo-editor',
+
+            properties: {
+                data: {
+                    type: Object,
+                    value: {
+                        firstname:  null,
+                        lastname: null,
+                        email: 'toto'
+                    },
+                    notify: true
+                },
+            },
+
+        });
+    </script>
+</dom-module>
