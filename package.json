@@ -1,8 +1,8 @@
 {
   "name": "air-cascade-validator",
   "version": "0.0.1",
-  "description": "Water page flow",
-  "main": "gulpfile.js",
+  "description": "Polymer 2 Element for validate",
+  "main": "air-cascade-validator.html",
   "directories": {
     "test": "test"
   },
@@ -28,12 +28,5 @@
   "bugs": {
     "url": "https://github.com/FiveElements/air-cascade-validator/issues"
   },
-  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme",
-  "devDependencies": {
-    "browser-sync": "^2.9.6",
-    "gulp": "^3.9.0",
-    "gulp-jshint": "^1.11.2",
-    "jshint-stylish": "^2.0.1",
-    "web-component-tester": "^3.3.22"
-  }
+  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme"
 }

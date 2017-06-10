@@ -1,60 +1,65 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
+
 
 <script>
 
     /**
      * FiveElements Namespace definition
      */
-    var FiveElements = FiveElements || {};
+    window.FiveElements = window.FiveElements || {};
 
 
     /**
-     * @polymerBehavior
+     * @polymerMixin
      */
-    FiveElements.AirCascadeValidatorBehavior = {
-        properties: {},
+    FiveElements.AirCascadeValidatorMixin = superclass => class extends superclass {
 
-        listeners: {
-            'iron-form-element-register': '_registerValidateElement',
-            'iron-form-element-unregister': '_unregisterValidateElement'
-        },
+        static get listeners() {
+            return {
+                'iron-form-element-register': '_registerValidateElement',
+                'iron-form-element-unregister': '_unregisterValidateElement'
+            }
+        }
 
 
         // --- Life Cycle
         // --- ---------------------------
-        ready: function () {
+        ready() {
             // Holds all the custom elements registered with this form.
             this._customElements = [];
-        },
+        }
+
 
         // --- Node Watcher
         // --- ---------------------------
-        _registerValidateElement: function (e) {
+        _registerValidateElement(e) {
             // Get the actual element that fired the event
-            var element = Polymer.dom(e).rootTarget;
+            let element = Polymer.dom(e).rootTarget;
 
             element._parentForm = this;
 //            if (this !== element) {
-                this._customElements.push(element);
+            this._customElements.push(element);
 //            }
-        },
+        }
 
-        _unregisterValidateElement: function(e) {
-            var target = e.detail.target;
+        _unregisterValidateElement(e) {
+            let target = e.detail.target;
             if (target) {
-                var index = this._customElements.indexOf(target);
+                let index = this._customElements.indexOf(target);
                 if (index > -1) {
                     this._customElements.splice(index, 1);
                 }
             }
-        },
+        }
 
         // --- Public Api
         // --- ---------------------------
-        validate: function (callback) {
+        validate(callback) {
 //            return this._validateAllNodes(callback);
             return this._validate();
-        },
+        }
 
 
         // --- Validators iron-form
@@ -63,11 +68,11 @@
          * Validates all the required elements (custom and *NOT* native) in the form.
          * @return {boolean} True if all the elements are valid.
          */
-        _validate: function () {
-            var valid = true;
+        _validate() {
+            let valid = true;
             // Validate all the custom elements.
-            var validatable;
-            for (var el, i = 0; el = this._customElements[i], i < this._customElements.length; i++) {
+            let validatable;
+            for (let el, i = 0; el = this._customElements[i], i < this._customElements.length; i++) {
                 if (!this._isChildOfRegisteredParent(el, false) && !el.disabled) {
                     validatable = /** @type {{validate: (function() : boolean)}} */ (el);
                     // Some elements may not have correctly defined a validate method.
@@ -80,11 +85,11 @@
                 valid = this._validateNativeElements(this.elements) && valid;
             }
             return valid;
-        },
+        }
 
-        _validateNativeElements: function (elements) {
-            var valid = true;
-            for (var el, i = 0; el = this.elements[i], i < this.elements.length; i++) {
+        _validateNativeElements(elements) {
+            let valid = true;
+            for (let el, i = 0; el = this.elements[i], i < this.elements.length; i++) {
                 // If this native element is inside a custom element that has already
                 // registered to this form, skip it.
                 if (this._isChildOfRegisteredParent(el, false)) {
@@ -97,7 +102,7 @@
                 }
             }
             return valid;
-        },
+        }
 
 
         /**
@@ -106,29 +111,29 @@
          * to this form. The second parameter specifies if the parent must have a
          * name to be considered.
          */
-        _isChildOfRegisteredParent: function(node, checkHasName) {
-            var parent = node;
+        _isChildOfRegisteredParent(node, checkHasName) {
+            let parent = node;
             // At some point going up the tree we'll find either this form or the document.
             while (parent && parent !== document && parent != this) {
                 // Use logical parentnode, or native ShadowRoot host.
                 parent = Polymer.dom(parent).parentNode || parent.host;
                 // Check if the parent was registered and submittable.
                 if (parent &&
-                        (!checkHasName || parent.name) &&
-                        parent._parentForm === this) {
+                    (!checkHasName || parent.name) &&
+                    parent._parentForm === this) {
                     return true;
                 }
             }
             return false;
-        },
+        }
 
         // --- Validators Simple
         // --- ---------------------------
 
-        _validateAllNodes: function (notValidNodesCallback) {
-            var childNodes = this._customElements;
+        _validateAllNodes(notValidNodesCallback) {
+            let childNodes = this._customElements;
             // Compute InValid nodes
-            var notValidNodes = Array.prototype.filter.call(childNodes, function (childNode) {
+            let notValidNodes = Array.prototype.filter.call(childNodes, function (childNode) {
                 if (typeof childNode.checkValidity === 'function') {
                     return !childNode.checkValidity();
                 } else if (typeof childNode.validate === 'function') {
@@ -142,11 +147,12 @@
             }
             // Return
             return notValidNodes.length < 1;
-        },
+        }
 
 
         // --- End
         // --- ---------------------------
-
     };
+
+
 </script>

@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 
 <link rel="import" href="air-cascade-validator-behaviour.html">
 
@@ -23,19 +23,20 @@ The `air-cascade-validator` provides cascade validation for all nodes
     </template>
 </dom-module>
 
+
 <script>
-    (function () {
-        'use strict';
+    /**
+     * `air-cruddy`
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class AirCascadeValidator extends  FiveElements.AirCascadeValidatorMixin(Polymer.Element) {
+        static get is() { return 'air-cascade-validator'; }
 
-        Polymer({
-            is: 'air-cascade-validator',
+    }
 
-            behaviors: [
-                FiveElements.AirCascadeValidatorBehavior
-            ],
-
-            properties: {}
-
-        });
-    })();
+    window.customElements.define(AirCascadeValidator.is, AirCascadeValidator);
 </script>
