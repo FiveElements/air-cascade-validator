@@ -16,17 +16,32 @@
      */
     FiveElements.AirCascadeValidatorMixin = superclass => class extends superclass {
 
-        static get listeners() {
-            return {
-                'iron-form-element-register': '_registerValidateElement',
-                'iron-form-element-unregister': '_unregisterValidateElement'
-            }
+        
+        constructor() {
+          super();
+          this._boundListenerironFormElementRegister = this._registerValidateElement.bind(this);
+          this._boundListenerironFormElementUnregister = this._unregisterValidateElement.bind(this);
         }
+
+        connectedCallback() {
+          super.connectedCallback();
+          window.addEventListener('iron-form-element-register', this._boundListenerironFormElementRegister);
+          window.addEventListener('iron-form-element-unregister', this._boundListenerironFormElementUnregister);
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          window.removeEventListener('iron-form-element-register', this._boundListenerironFormElementRegister);
+          window.removeEventListener('iron-form-element-unregister', this._boundListenerironFormElementUnregister);
+        }
+        
+ 
 
 
         // --- Life Cycle
         // --- ---------------------------
         ready() {
+             super.ready();
             // Holds all the custom elements registered with this form.
             this._customElements = [];
         }
