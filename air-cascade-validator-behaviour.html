@@ -88,17 +88,26 @@
 
             let elements = this._getValidatableElements(this.$.dataForm);
             // Go through all the elements, and validate the custom ones.
-            let valid = false;
-//            let invalidNode = [];
-            for (let el, i = 0; el = elements[i], i < elements.length; i++) {
-                // This is weird to appease the compiler. We assume the custom element
-                // has a validate() method, otherwise we can't check it.
+
+            let invalidNodes = elements.filter(el=>{
+//                // This is weird to appease the compiler. We assume the custom element
+//                // has a validate() method, otherwise we can't check it.
                 let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
                 if (validatable.validate) {
-                    valid = !!validatable.validate() && valid;
+                    return !validatable.validate();
                 }
-            }
-            console.log('Form is valid ==> ' , valid, '<---- with ----', elements);
+                return false;
+            });
+            let valid = invalidNodes.length<1;
+//            for (let el, i = 0; el = elements[i], i < elements.length; i++) {
+//                // This is weird to appease the compiler. We assume the custom element
+//                // has a validate() method, otherwise we can't check it.
+//                let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
+//                if (validatable.validate) {
+//                    valid = !!validatable.validate() && valid;
+//                }
+//            }
+            console.log('Form is valid ==> ' , valid, '<---- with ----', invalidNodes);
             return valid;
         };
 

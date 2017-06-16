@@ -20,14 +20,14 @@
                 <paper-input label="Firstname" value="{{data.taxi.firstname}}" required></paper-input>
             </div>
             <div>
-                <paper-input label="Lastname" value="{{data.taxi.lastname}}" required></paper-input>
+                <paper-input label="Lastname" value="{{data.taxi.lastname}}" minlength="5" required></paper-input>
             </div>
         </div>
         <div>
             <h2>The Bad man</h2>
             <template is="dom-repeat" items="[[data.badman]]">
                 <div>
-                    <paper-input label="Bad Men [[index]]" value="{{item.name}}" maxlength="5" required></paper-input>
+                    <paper-input label="Bad Men [[index]]" value="{{item.name}}" minlength="5" required></paper-input>
                 </div>
         </div>
     </template>
