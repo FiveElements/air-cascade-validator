@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>air-cascade-validator test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../air-cascade-validator.html">
+
+    <link rel="import" href="../../paper-input/paper-input.html">
+
+</head>
+<body>
+
+<test-fixture id="BasicTestFixture">
+    <template is="dom-template">
+        <air-cascade-validator>
+            <paper-input label="Firstname" value="Korben" required></paper-input>
+            <paper-input label="Lastname"  value="Dallas" required></paper-input>
+        </air-cascade-validator>
+    </template>
+</test-fixture>
+
+<test-fixture id="UnvalidBasicTestFixture">
+    <template is="dom-template">
+        <air-cascade-validator>
+            <paper-input label="Firstname" value="Leeloo" required></paper-input>
+            <paper-input label="Lastname" value="" required></paper-input>
+        </air-cascade-validator>
+    </template>
+</test-fixture>
+
+<script>
+    suite('air-cascade-validator', function () {
+
+        test('test valid element', function () {
+            let element = fixture('BasicTestFixture');
+            assert.isTrue(element.validate(), 'it should be a valid form');
+            let elementShadowRoot = element.shadowRoot;
+            let elementHeader = elementShadowRoot.querySelector('paper-input');
+//          assert.equal(elementHeader.innerHTML, 'Hello air-cascade-validator!');
+        });
+
+        test('test unvalid element', function () {
+            // Create a test fixture
+            let element = fixture('UnvalidBasicTestFixture');
+            assert.isNotTrue(element.validate(), 'it should be a invalid form');
+            let elementShadowRoot = element.shadowRoot;
+            let elementHeader = elementShadowRoot.querySelector('h2');
+//            assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+        });
+
+    });
+</script>
+
+</body>
+</html>

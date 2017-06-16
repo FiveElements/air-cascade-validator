@@ -47,8 +47,6 @@
 //          window.removeEventListener('iron-form-element-unregister', this._boundListenerironFormElementUnregister);
 //        }
 //
- 
-
 
 
         // --- Node Watcher
@@ -87,9 +85,11 @@
             }
             // Start by making the form check the native elements it knows about.
 //            let valid = this._form.checkValidity();
+
             let elements = this._getValidatableElements(this.$.dataForm);
             // Go through all the elements, and validate the custom ones.
             let valid = false;
+//            let invalidNode = [];
             for (let el, i = 0; el = elements[i], i < elements.length; i++) {
                 // This is weird to appease the compiler. We assume the custom element
                 // has a validate() method, otherwise we can't check it.
@@ -98,7 +98,7 @@
                     valid = !!validatable.validate() && valid;
                 }
             }
-            console.log('is valid ==> ' + valid);
+            console.log('Form is valid ==> ' , valid, '<---- with ----', elements);
             return valid;
         };
 
@@ -117,26 +117,53 @@
          * @private
          */
         _computeValidatableElements(parent) {
-            let nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
-            let elements = nodes.reduce((acc,el) =>{
-                // Test node
+             let nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
+//            console.log('Parent to visit  : ', parent, '==>', nodes);
+            let elements = nodes.reduce((acc, el) => {
+                let elTagName = el.tagName;
+                // Exclude not wanted search
+                // ----------------------------
+                // To manage the #text
+                if (!elTagName) {
+                    return acc;
+                }
+                switch (el.tagName) {
+                    case 'STYLE':
+                        return acc;
+                }
+                // node with validation method
+                // ----------------------------
                 let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
                 if (validatable.validate) {
-                      acc.push(validatable);
-                      return acc;
+                    acc.push(validatable);
+                    return acc;
                 }
-                // Test childrens
-                let shadowNode =  el.shadowRoot;
-                if  (shadowNode && shadowNode.mode === 'open') {
+                // Search in Shadow root
+                // ----------------------------
+                let shadowNode = el.shadowRoot;
+                if (shadowNode && shadowNode.mode === 'open') {
                     let childElt = this._getValidatableElements(shadowNode);
                     acc.push(...childElt);
+                    return acc;
                 }
+                // Search in Parents
+                // ----------------------------
+                let elChild = el.children;
+//                console.log('Test All child', el, elChild);
+                if (elChild) {
+                    let childElt = this._getValidatableElements(el);
+                    acc.push(...childElt);
+                    return acc;
+                }
+//
+//                let allChilds = el.querySelectorAll('*');
+//                console.log('   ==> All childs :',el, '==>', allChilds);
+
                 return acc;
             }, []);
 //            console.log(elements);
             return elements;
         };
-
 
 
         // --- End

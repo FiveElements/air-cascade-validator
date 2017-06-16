@@ -1,0 +1,77 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="../../paper-input/paper-input.html">
+
+<dom-module id="demo-complex-form">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <div>
+            <h2>The Five Elements</h2>
+            <paper-input label="Firstname" value="{{data.five.firstname}}" required></paper-input>
+            <paper-input label="Lastname" value="{{data.five.lastname}}" required></paper-input>
+        </div>
+        <div>
+            <h2>The Taxi</h2>
+            <div>
+                <paper-input label="Firstname" value="{{data.taxi.firstname}}" required></paper-input>
+            </div>
+            <div>
+                <paper-input label="Lastname" value="{{data.taxi.lastname}}" required></paper-input>
+            </div>
+        </div>
+        <div>
+            <h2>The Bad man</h2>
+            <template is="dom-repeat" items="[[data.badman]]">
+                <div>
+                    <paper-input label="Bad Men [[index]]" value="{{item.name}}" maxlength="5" required></paper-input>
+                </div>
+        </div>
+    </template>
+    </div>
+    </template>
+
+    <script>
+        /**
+         * `demo-complex-form`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class DemoComplexForm extends Polymer.Element {
+            static get is() {
+                return 'demo-complex-form';
+            }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Object,
+                        value: {
+                            five: {
+                                firstname: 'Leeloominaï',
+                                lastname: 'Lekatariba Laminatchaï Ekbat De Sebat'
+                            },
+                            taxi: {
+                                firstname: 'Korben',
+                                lastname: 'Dallas'
+                            },
+                            badman: [
+                                {name: 'Zorb'},
+                                {name: 'Mangalores'}
+                            ],
+                        }
+                    }
+                };
+            }
+
+        }
+
+        window.customElements.define(DemoComplexForm.is, DemoComplexForm);
+    </script>
+</dom-module>

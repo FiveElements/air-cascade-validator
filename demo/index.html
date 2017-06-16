@@ -15,6 +15,7 @@
     <link rel="import" href="../air-cascade-validator.html">
     <link rel="import" href="demo-editor.html">
     <link rel="import" href="demo-control.html">
+    <link rel="import" href="demo-complex-form.html">
 
     <link rel="import" href="../../paper-input/paper-input.html">
     <link rel="import" href="../../paper-button/paper-button.html">
@@ -29,8 +30,8 @@
     <h3>Basic air-cascade-validator demo</h3>
     <demo-snippet>
         <dom-bind>
-        <template id="demo">
-            <demo-control  onclick="validate()" is-valid="[[isValid]]" ></demo-control>
+        <template id="demo1">
+            <demo-control  onclick="validateDemo1()" is-valid="[[isValid]]" ></demo-control>
 
             <air-cascade-validator id="validator">
                 <demo-editor data="{{data}}"></demo-editor>
@@ -39,12 +40,38 @@
         </dom-bind>
 
         <script>
-            let demo = document.querySelector('#demo');
-            demo.isValid = true;
+            let demo1 = document.querySelector('#demo1');
+//            demo.isValid = true;
 
-            function validate() {
+            function validateDemo1() {
                let isValid = document.getElementById('validator').validate();
-               demo.isValid = isValid;
+               demo1.isValid = isValid;
+            }
+        </script>
+    </demo-snippet>
+</div>
+<div class="vertical-section-container centered">
+    <h3>Complexe air-cascade-validator demo</h3>
+    <demo-snippet>
+        <dom-bind>
+            <template id="demo2">
+                <demo-control  onclick="validateDemo2()" is-valid="[[isValid2]]" ></demo-control>
+
+                <air-cascade-validator id="validator2">
+                    <demo-complex-form></demo-complex-form>
+                </air-cascade-validator>
+            </template>
+        </dom-bind>
+        <script>
+            let demo2 = document.querySelector('#demo2');
+//            console.log(demo2);
+//            demo2.isValid2 = true;
+
+            function validateDemo2() {
+                let validatorDemo2 =  document.getElementById('validator2');
+                console.log('Validator : ', validatorDemo2);
+                let isValid = validatorDemo2.validate();
+                demo2.isValid2 = isValid;
             }
         </script>
     </demo-snippet>
