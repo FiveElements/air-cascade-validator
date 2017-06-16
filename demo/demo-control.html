@@ -1,14 +1,7 @@
-<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../polymer/polymer-element.html">
 
 <link rel="import" href="../../paper-input/paper-input.html">
 <link rel="import" href="../../paper-button/paper-button.html">
-
-<!--
-`demo-control`
-Polymer Element demo-control
-
-@demo demo/index.html 
--->
 
 <dom-module id="demo-control">
     <template>
@@ -25,16 +18,28 @@ Polymer Element demo-control
     </template>
 
     <script>
-        Polymer({
+        /**
+         * `demo-control`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class DemoControl extends Polymer.Element {
+            static get is() {
+                return 'demo-control';
+            }
 
-            is: 'demo-control',
+            static get properties() {
+                return {
+                    isValid: {
+                        type: Boolean
+                    }
+                };
+            }
+        }
 
-            properties: {
-                isValid: {
-                    type: Boolean
-                },
-            },
-
-        });
+        window.customElements.define(DemoControl.is, DemoControl);
     </script>
 </dom-module>

@@ -19,28 +19,32 @@
     <link rel="import" href="../../paper-input/paper-input.html">
     <link rel="import" href="../../paper-button/paper-button.html">
 
-    <style is="custom-style" include="demo-pages-shared-styles">
-    </style>
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </custom-style>
 </head>
 <body>
 <div class="vertical-section-container centered">
     <h3>Basic air-cascade-validator demo</h3>
     <demo-snippet>
-        <template is="dom-bind" id="demo">
+        <dom-bind>
+        <template id="demo">
             <demo-control  onclick="validate()" is-valid="[[isValid]]" ></demo-control>
 
             <air-cascade-validator id="validator">
                 <demo-editor data="{{data}}"></demo-editor>
             </air-cascade-validator>
         </template>
+        </dom-bind>
 
         <script>
-            var demo = document.querySelector('#demo');
+            let demo = document.querySelector('#demo');
             demo.isValid = true;
 
             function validate() {
-               var isValid = document.getElementById('validator').validate();
-                demo.isValid = isValid;
+               let isValid = document.getElementById('validator').validate();
+               demo.isValid = isValid;
             }
         </script>
     </demo-snippet>
