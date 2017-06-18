@@ -1,0 +1,175 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
+
+
+<script>
+
+    /**
+     * FiveElements Namespace definition
+     */
+    window.FiveElements = window.FiveElements || {};
+
+
+    /**
+     * @polymerMixin
+     */
+    FiveElements.AirCascadeValidatorMixin = (superclass) => class extends superclass {
+
+
+        static get properties() {
+            return {
+                novalidate: {
+                    type: Boolean
+                },
+                isValid: {
+                    type: Boolean,
+                    notify: true
+                }
+            };
+        }
+
+        // --- Life Cycle
+        // --- ---------------------------
+
+
+
+        // --- Public Api
+        // --- ---------------------------
+        /**
+         * Validates all the required elements (custom and native) in the form.
+         * @return {boolean} True if all the elements are valid.
+         */
+        validate() {
+            let valid =  this._validate();
+//            this.isValid = valid;
+            return valid;
+        }
+
+        /**
+         * Validates all the required elements (custom and native) in the form.
+         * @return {boolean} True if all the elements are valid.
+         */
+        async _validate() {
+//            console.log('validate...');
+            if (this.novalidate) {
+                return true;
+            }
+            // Start by making the form check the native elements it knows about.
+//            let valid = this._form.checkValidity();
+
+            const promiseInvalidNodes =   this._getValidatableElements(this)
+                .then (elements=> {
+                    console.log("Validate elements:", elements);
+                    return elements;
+                })
+                .then (elements=> {
+                    let invalidNodes = elements.filter(el=>{
+//                // This is weird to appease the compiler. We assume the custom element
+//                // has a validate() method, otherwise we can't check it.
+                        let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
+                        if (validatable.validate) {
+                            let elValid = validatable.validate();
+                            console.log('test elements is valid',validatable, '==>', elValid);
+                            return !elValid;
+                        }
+                        return false;
+                    });
+                    return invalidNodes;
+                }).then(invalidNodes => {
+                    this.invalidNodes = invalidNodes;
+                    return invalidNodes;
+                }).then (invalidNodes=> {
+                    const valid = invalidNodes.length<1;
+                    this.isValid = valid;
+                    return valid;
+                });
+            // Go through all the elements, and validate the custom ones.
+            const valid = await promiseInvalidNodes;
+
+            console.log('Form is valid ==> ' , valid, '<---- with ----', 'invalidNodes');
+            return valid;
+        };
+
+
+        // --- Validators iron-form
+        // --- ---------------------------
+
+        /**
+         * Get Validatable Nodes by Visit all node of the given parent
+         * @param parent to visit
+         * @return A Array of validatable Nodes
+         */
+        _getValidatableElements(parent) {
+            return new Promise( (resolve, error) => {
+                let validatableElts = this._computeValidatableElements(parent);
+                resolve(validatableElts);
+            })
+        }
+
+        /**
+         * Visist all child nodes of parent in order to find validatable nodes
+         * @param parent to visit
+         * @returns A promise of Validatable nodes
+         * @private
+         */
+        _computeValidatableElements(parent) {
+            const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
+//            console.log('Parent to visit  : ', parent, '==>', nodes);
+            const elements = nodes.reduce((acc, el) => {
+                let elTagName = el.tagName;
+                // Exclude not wanted search
+                // ----------------------------
+                // To manage the #text
+                if (!elTagName) {
+                    return acc;
+                }
+                switch (el.tagName) {
+                    case 'STYLE':
+                        return acc;
+                }
+                // node with validation method
+                // ----------------------------
+                let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
+                if (validatable.validate) {
+                    acc.push(validatable);
+                    return acc;
+                }
+                // Search in Shadow root
+                // ----------------------------
+                let shadowNode = el.shadowRoot;
+                if (shadowNode && shadowNode.mode === 'open') {
+                    const childElt = this._computeValidatableElements(shadowNode);
+                    if (childElt && childElt.length>0) {
+                        acc.push(...childElt);
+                    }
+                    return acc;
+                }
+                // Search in Parents
+                // ----------------------------
+                const elChild = el.children;
+//                console.log('Test All child', el, elChild);
+                if (elChild) {
+                    const childElt = this._computeValidatableElements(el);
+                    if (childElt && childElt.length>0) {
+                        acc.push(...childElt);
+                    }
+                    return acc;
+                }
+//
+//                let allChilds = el.querySelectorAll('*');
+//                console.log('   ==> All childs :',el, '==>', allChilds);
+
+                return acc;
+            }, []);
+//            console.log(elements);
+            return elements;
+        };
+
+
+        // --- End
+        // --- ---------------------------
+    };
+
+
+</script>

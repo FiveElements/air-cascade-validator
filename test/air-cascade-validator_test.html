@@ -37,20 +37,23 @@
 <script>
     suite('air-cascade-validator', function () {
 
-        test('test valid element', function () {
+         test('test valid element', function () {
             let element = fixture('BasicTestFixture');
-            assert.isTrue(element.validate(), 'it should be a valid form');
+            let isValid =   element.validate();
+            assert.isTrue(isValid, 'it should be a valid form');
             let elementShadowRoot = element.shadowRoot;
             let elementHeader = elementShadowRoot.querySelector('paper-input');
 //          assert.equal(elementHeader.innerHTML, 'Hello air-cascade-validator!');
         });
 
-        test('test unvalid element', function () {
+          test('test unvalid element', function () {
             // Create a test fixture
             let element = fixture('UnvalidBasicTestFixture');
-            assert.isNotTrue(element.validate(), 'it should be a invalid form');
+            let isValid =   element.validate();
+            console.log('Test result validate:', isValid);
+            assert.isFalse(isValid, 'it should be a invalid form');
             let elementShadowRoot = element.shadowRoot;
-            let elementHeader = elementShadowRoot.querySelector('h2');
+//            let elementHeader = elementShadowRoot.querySelector('paper-input');
 //            assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
         });
 
