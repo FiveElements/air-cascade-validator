@@ -25,6 +25,10 @@
                 isValid: {
                     type: Boolean,
                     notify: true
+                },
+                invalidNodes: {
+                    type:Array,
+                    notify:true
                 }
             };
         }
@@ -33,16 +37,25 @@
         // --- ---------------------------
 
 
-
         // --- Public Api
-        // --- ---------------------------
+        // --- ---------------------------;
+        validatePromise() {
+            return new Promise((resolve, error) => {
+                const valid = this.validate();
+                resolve(valid);
+            });
+        }
+
         /**
          * Validates all the required elements (custom and native) in the form.
          * @return {boolean} True if all the elements are valid.
          */
         validate() {
-            let valid =  this._validate();
-//            this.isValid = valid;
+            const invalidNodes = this.getInvalidNodes();
+            const valid = invalidNodes.length < 1;
+            console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
+            this.invalidNodes = invalidNodes;
+            this.isValid = valid;
             return valid;
         }
 
@@ -50,7 +63,7 @@
          * Validates all the required elements (custom and native) in the form.
          * @return {boolean} True if all the elements are valid.
          */
-        async _validate() {
+        getInvalidNodes() {
 //            console.log('validate...');
             if (this.novalidate) {
                 return true;
@@ -58,38 +71,23 @@
             // Start by making the form check the native elements it knows about.
 //            let valid = this._form.checkValidity();
 
-            const promiseInvalidNodes =   this._getValidatableElements(this)
-                .then (elements=> {
-                    console.log("Validate elements:", elements);
-                    return elements;
-                })
-                .then (elements=> {
-                    let invalidNodes = elements.filter(el=>{
+            const elements = this._getValidatableElements(this);
+            console.log("Validate elements:", elements);
+
+            // Go through all the elements, and validate the custom ones.
+            const invalidNodes = elements.filter(el => {
 //                // This is weird to appease the compiler. We assume the custom element
 //                // has a validate() method, otherwise we can't check it.
-                        let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
-                        if (validatable.validate) {
-                            let elValid = validatable.validate();
-                            console.log('test elements is valid',validatable, '==>', elValid);
-                            return !elValid;
-                        }
-                        return false;
-                    });
-                    return invalidNodes;
-                }).then(invalidNodes => {
-                    this.invalidNodes = invalidNodes;
-                    return invalidNodes;
-                }).then (invalidNodes=> {
-                    const valid = invalidNodes.length<1;
-                    this.isValid = valid;
-                    return valid;
-                });
-            // Go through all the elements, and validate the custom ones.
-            const valid = await promiseInvalidNodes;
-
-            console.log('Form is valid ==> ' , valid, '<---- with ----', 'invalidNodes');
-            return valid;
-        };
+                let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
+                if (validatable.validate) {
+                    let elValid = validatable.validate();
+                    console.log('test elements is valid', validatable, '==>', elValid);
+                    return !elValid;
+                }
+                return false;
+            });
+            return invalidNodes;
+        }
 
 
         // --- Validators iron-form
@@ -101,10 +99,8 @@
          * @return A Array of validatable Nodes
          */
         _getValidatableElements(parent) {
-            return new Promise( (resolve, error) => {
-                let validatableElts = this._computeValidatableElements(parent);
-                resolve(validatableElts);
-            })
+            const validatableElts = this._computeValidatableElements(parent);
+            return validatableElts;
         }
 
         /**
@@ -137,10 +133,10 @@
                 }
                 // Search in Shadow root
                 // ----------------------------
-                let shadowNode = el.shadowRoot;
+                const shadowNode = el.shadowRoot;
                 if (shadowNode && shadowNode.mode === 'open') {
                     const childElt = this._computeValidatableElements(shadowNode);
-                    if (childElt && childElt.length>0) {
+                    if (childElt && childElt.length > 0) {
                         acc.push(...childElt);
                     }
                     return acc;
@@ -151,7 +147,7 @@
 //                console.log('Test All child', el, elChild);
                 if (elChild) {
                     const childElt = this._computeValidatableElements(el);
-                    if (childElt && childElt.length>0) {
+                    if (childElt && childElt.length > 0) {
                         acc.push(...childElt);
                     }
                     return acc;
