@@ -5,6 +5,8 @@
 
 <script>
 
+    'use strict';
+
     /**
      * FiveElements Namespace definition
      */
@@ -29,6 +31,9 @@
                 invalidNodes: {
                     type:Array,
                     notify:true
+                },
+                debug: {
+                    type: Boolean
                 }
             };
         }
@@ -36,6 +41,10 @@
         // --- Life Cycle
         // --- ---------------------------
 
+        disconnectedCallback() {
+            super.disconnectedCallback();
+            this.invalidNodes = undefined;
+        }
 
         // --- Public Api
         // --- ---------------------------;
@@ -46,6 +55,8 @@
             });
         }
 
+
+
         /**
          * Validates all the required elements (custom and native) in the form.
          * @return {boolean} True if all the elements are valid.
@@ -53,7 +64,7 @@
         validate() {
             const invalidNodes = this.getInvalidNodes();
             const valid = invalidNodes.length < 1;
-            console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
+            if (this.debug) console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
             this.invalidNodes = invalidNodes;
             this.isValid = valid;
             return valid;
@@ -72,7 +83,7 @@
 //            let valid = this._form.checkValidity();
 
             const elements = this._getValidatableElements(this);
-            console.log("Validate elements:", elements);
+            if (this.debug) console.log("Validate elements:", elements);
 
             // Go through all the elements, and validate the custom ones.
             const invalidNodes = elements.filter(el => {
@@ -81,7 +92,7 @@
                 let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
                 if (validatable.validate) {
                     let elValid = validatable.validate();
-                    console.log('test elements is valid', validatable, '==>', elValid);
+                    if (this.debug) console.log('test elements is valid', validatable, '==>', elValid, '=', el.value);
                     return !elValid;
                 }
                 return false;

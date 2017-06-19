@@ -20,16 +20,17 @@
     <template is="dom-template">
         <air-cascade-validator>
             <paper-input label="Firstname" value="Korben" required></paper-input>
-            <paper-input label="Lastname"  value="Dallas" required></paper-input>
+            <paper-input label="Lastname" value="Dallas" required></paper-input>
         </air-cascade-validator>
     </template>
 </test-fixture>
 
 <test-fixture id="UnvalidBasicTestFixture">
     <template is="dom-template">
-        <air-cascade-validator>
+        <air-cascade-validator debug>
             <paper-input label="Firstname" value="Leeloo" required></paper-input>
             <paper-input label="Lastname" value="" required></paper-input>
+            <paper-input label="Email" value="ddd" type="email"></paper-input>
         </air-cascade-validator>
     </template>
 </test-fixture>
@@ -37,24 +38,29 @@
 <script>
     suite('air-cascade-validator', function () {
 
-         test('test valid element', function () {
+        test('test valid element', function (done) {
             let element = fixture('BasicTestFixture');
-            let isValid =   element.validate();
-            assert.isTrue(isValid, 'it should be a valid form');
-            let elementShadowRoot = element.shadowRoot;
-            let elementHeader = elementShadowRoot.querySelector('paper-input');
-//          assert.equal(elementHeader.innerHTML, 'Hello air-cascade-validator!');
+            Polymer.Base.async(() => {
+                let isValid = element.validate();
+                assert.isTrue(isValid, 'it should be a valid form');
+                let elementShadowRoot = element.shadowRoot;
+                let elementHeader = elementShadowRoot.querySelector('paper-input');
+                done();
+            });
         });
 
-          test('test unvalid element', function () {
+        test('test unvalid element', function (done) {
             // Create a test fixture
             let element = fixture('UnvalidBasicTestFixture');
-            let isValid =   element.validate();
-            console.log('Test result validate:', isValid);
-            assert.isFalse(isValid, 'it should be a invalid form');
-            let elementShadowRoot = element.shadowRoot;
+            Polymer.Base.async(() => {
+                let isValid = element.validate();
+                console.log('Test result validate:', isValid);
+                assert.isFalse(isValid, 'it should be a invalid form');
+                let elementShadowRoot = element.shadowRoot;
 //            let elementHeader = elementShadowRoot.querySelector('paper-input');
 //            assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+                done();
+            });
         });
 
     });
