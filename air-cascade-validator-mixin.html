@@ -110,7 +110,12 @@
          * @return A Array of validatable Nodes
          */
         _getValidatableElements(parent) {
-            const validatableElts = this._computeValidatableElements(parent);
+            const validatableElts = this._computeValidatableElements(parent, (el) => {
+                if (el.validate) {
+                    return true;
+                }
+                return false;
+            });
             return validatableElts;
         }
 
@@ -120,53 +125,39 @@
          * @returns A promise of Validatable nodes
          * @private
          */
-        _computeValidatableElements(parent) {
+        _computeValidatableElements(parent, filter) {
             const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
-//            console.log('Parent to visit  : ', parent, '==>', nodes);
             const elements = nodes.reduce((acc, el) => {
-                let elTagName = el.tagName;
                 // Exclude not wanted search
                 // ----------------------------
-                // To manage the #text
-                if (!elTagName) {
+                const elTagName = el.tagName;
+                if (!elTagName || elTagName === 'STYLE') {
                     return acc;
-                }
-                switch (el.tagName) {
-                    case 'STYLE':
-                        return acc;
                 }
                 // node with validation method
                 // ----------------------------
-                let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
-                if (validatable.validate) {
-                    acc.push(validatable);
+                if (filter(el)) {
+                    acc.push(el);
                     return acc;
                 }
-                // Search in Shadow root
+                // Determine Parent Type  Open Shadow root or direct Child
                 // ----------------------------
                 const shadowNode = el.shadowRoot;
-                if (shadowNode && shadowNode.mode === 'open') {
-                    const childElt = this._computeValidatableElements(shadowNode);
-                    if (childElt && childElt.length > 0) {
-                        acc.push(...childElt);
-                    }
-                    return acc;
+                let elChild;
+                if (shadowNode && (shadowNode.mode === 'open')) {
+                    elChild = shadowNode;
+                } else {
+                    elChild = el.children;
                 }
                 // Search in Parents
                 // ----------------------------
-                const elChild = el.children;
-//                console.log('Test All child', el, elChild);
                 if (elChild) {
-                    const childElt = this._computeValidatableElements(el);
+                    const childElt = this._computeValidatableElements(elChild, filter);
                     if (childElt && childElt.length > 0) {
                         acc.push(...childElt);
                     }
                     return acc;
                 }
-//
-//                let allChilds = el.querySelectorAll('*');
-//                console.log('   ==> All childs :',el, '==>', allChilds);
-
                 return acc;
             }, []);
 //            console.log(elements);
