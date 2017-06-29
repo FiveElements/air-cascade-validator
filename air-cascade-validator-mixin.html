@@ -120,13 +120,14 @@
         }
 
         /**
-         * Visist all child nodes of parent in order to find validatable nodes
+         * Visist all child nodes of parent in order to find filter nodes
          * @param parent to visit
          * @param filter for the nodes
+         * @param visitChildNodes Visit all child nodes
          * @returns A Array Od filters nodes
          * @private
          */
-        _computeFilterNodes(parent, filter) {
+        _computeFilterNodes(parent, filter, visitChildNodes=true) {
             const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
             const elements = nodes.reduce((acc, el) => {
                 // Exclude not wanted search
@@ -143,17 +144,19 @@
                 }
                 // Determine Parent Type  Open Shadow root or direct Child
                 // ----------------------------
-                const shadowNode = el.shadowRoot;
                 let elChild;
-                if (shadowNode && (shadowNode.mode === 'open')) {
-                    elChild = shadowNode;
-                } else {
-                    elChild = el.children;
+                if (visitChildNodes) {
+                    const shadowNode = el.shadowRoot;
+                    if (shadowNode && (shadowNode.mode === 'open')) {
+                        elChild = shadowNode;
+                    } else {
+                        elChild = el.children;
+                    }
                 }
                 // Search in Parents
                 // ----------------------------
                 if (elChild) {
-                    const childElt = this._computeFilterNodes(elChild, filter);
+                    const childElt = this._computeFilterNodes(elChild, filter, visitChildNodes);
                     if (childElt && childElt.length > 0) {
                         acc.push(...childElt);
                     }
