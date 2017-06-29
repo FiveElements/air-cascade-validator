@@ -110,7 +110,7 @@
          * @return A Array of validatable Nodes
          */
         _getValidatableElements(parent) {
-            const validatableElts = this._computeValidatableElements(parent, (el) => {
+            const validatableElts = this._computeFilterNodes(parent, (el) => {
                 if (el.validate) {
                     return true;
                 }
@@ -122,10 +122,11 @@
         /**
          * Visist all child nodes of parent in order to find validatable nodes
          * @param parent to visit
-         * @returns A promise of Validatable nodes
+         * @param filter for the nodes
+         * @returns A Array Od filters nodes
          * @private
          */
-        _computeValidatableElements(parent, filter) {
+        _computeFilterNodes(parent, filter) {
             const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
             const elements = nodes.reduce((acc, el) => {
                 // Exclude not wanted search
@@ -152,7 +153,7 @@
                 // Search in Parents
                 // ----------------------------
                 if (elChild) {
-                    const childElt = this._computeValidatableElements(elChild, filter);
+                    const childElt = this._computeFilterNodes(elChild, filter);
                     if (childElt && childElt.length > 0) {
                         acc.push(...childElt);
                     }
@@ -160,7 +161,6 @@
                 }
                 return acc;
             }, []);
-//            console.log(elements);
             return elements;
         };
 
