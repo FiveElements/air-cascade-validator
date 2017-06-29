@@ -1,0 +1,63 @@
+
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
+
+<script>
+    (function () {
+        'use strict';
+
+
+        class AirVisitorNodesUtils {
+            /**
+             * Visist all child nodes of parent in order to find filter nodes
+             * @param parent to visit
+             * @param filter for the nodes
+             * @param visitChildNodes Visit all child nodes
+             * @returns A Array Od filters nodes
+             * @private
+             */
+            static  _computeFilterNodes(parent, filter, visitChildNodes = true) {
+                const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
+                const elements = nodes.reduce((acc, el) => {
+                    // Exclude not wanted search
+                    // ----------------------------
+                    const elTagName = el.tagName;
+                    if (!elTagName || elTagName === 'STYLE') {
+                        return acc;
+                    }
+                    // node with validation method
+                    // ----------------------------
+                    if (filter(el)) {
+                        acc.push(el);
+                        return acc;
+                    }
+                    // Determine Parent Type  Open Shadow root or direct Child
+                    // ----------------------------
+                    let elChild;
+                    if (visitChildNodes) {
+                        const shadowNode = el.shadowRoot;
+                        if (shadowNode && (shadowNode.mode === 'open')) {
+                            elChild = shadowNode;
+                        } else {
+                            elChild = el.children;
+                        }
+                    }
+                    // Search in Parents
+                    // ----------------------------
+                    if (elChild) {
+                        const childElt = this._computeFilterNodes(elChild, filter, visitChildNodes);
+                        if (childElt && childElt.length > 0) {
+                            acc.push(...childElt);
+                        }
+                        return acc;
+                    }
+                    return acc;
+                }, []);
+                return elements;
+            };
+
+        }
+
+        Polymer.AirVisitorNodesUtils = AirVisitorNodesUtils;
+
+    })();
+</script>
