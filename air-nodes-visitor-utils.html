@@ -11,12 +11,13 @@
              * Visist all child nodes of parent in order to find filter nodes
              * @param parent to visit
              * @param filter for the nodes
-             * @param visitChildNodes Visit all child nodes
+             * @param levelToVisit Number of child level to visit. -1 means visit all level.
              * @returns A Array Od filters nodes
              * @private
              */
-            static  _computeFilterNodes(parent, filter, visitChildNodes = true) {
+            static computeFilterNodes(parent, filter, levelToVisit = -1) {
                 const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
+                console.log('parent : ', parent, ' -- level : ', levelToVisit, '-->', nodes);
                 const elements = nodes.reduce((acc, el) => {
                     // Exclude not wanted search
                     // ----------------------------
@@ -33,18 +34,18 @@
                     // Determine Parent Type  Open Shadow root or direct Child
                     // ----------------------------
                     let elChild;
-                    if (visitChildNodes) {
+                    if (levelToVisit !== 0) {
                         const shadowNode = el.shadowRoot;
                         if (shadowNode && (shadowNode.mode === 'open')) {
                             elChild = shadowNode;
                         } else {
-                            elChild = el.children;
+                            elChild = el;
                         }
                     }
                     // Search in Parents
                     // ----------------------------
                     if (elChild) {
-                        const childElt = this._computeFilterNodes(elChild, filter, visitChildNodes);
+                        const childElt = this._computeFilterNodes(elChild, filter, levelToVisit - 1);
                         if (childElt && childElt.length > 0) {
                             acc.push(...childElt);
                         }
