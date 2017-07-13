@@ -13,3 +13,10 @@ Air cascade Validator manager the validation of all Nodes inside
   <paper-input label="email" value="{{data.email}}" type="email"></paper-input>
 </air-cascade-validator>
 ```
+
+# Release
+
+```bash
+$ git tag -a v2.0.1 -m "Release 2.0.1"
+git push origin --tags
+```
