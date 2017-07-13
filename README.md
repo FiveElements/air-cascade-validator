@@ -39,6 +39,6 @@ Air cascade Validator manager the validation of all Nodes inside
 # Release
 
 ```bash
-$ git tag -a v2.0.2 -m "Release 2.0.2"
+$ git tag -a v2.0.3 -m "Release 2.0.3"
 $ git push origin --tags
 ```
