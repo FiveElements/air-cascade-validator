@@ -17,7 +17,7 @@
              */
             static computeFilterNodes(parent, filter, levelToVisit = -1) {
                 const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
-                console.log('parent : ', parent, ' -- level : ', levelToVisit, '-->', nodes);
+//                console.log('parent : ', parent, ' -- level : ', levelToVisit, '-->', nodes);
                 const elements = nodes.reduce((acc, el) => {
                     // Exclude not wanted search
                     // ----------------------------
@@ -45,7 +45,7 @@
                     // Search in Parents
                     // ----------------------------
                     if (elChild) {
-                        const childElt = this._computeFilterNodes(elChild, filter, levelToVisit - 1);
+                        const childElt = this.computeFilterNodes(elChild, filter, levelToVisit - 1);
                         if (childElt && childElt.length > 0) {
                             acc.push(...childElt);
                         }
@@ -58,7 +58,13 @@
 
         }
 
-        Polymer.AirVisitorNodesUtils = AirVisitorNodesUtils;
+
+        /**
+         * FiveElements Namespace definition
+         */
+        window.FiveElements = window.FiveElements || {};
+
+        FiveElements.AirVisitorNodesUtils = AirVisitorNodesUtils;
 
     })();
 </script>

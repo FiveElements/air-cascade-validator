@@ -2,6 +2,8 @@
 
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 
+<link rel="import" href="air-nodes-visitor-utils.html">
+
 
 <script>
 
@@ -31,6 +33,9 @@
                 invalidNodes: {
                     type: Array,
                     notify: true
+                },
+                autoFocus: {
+                  type: Boolean
                 },
                 debug: {
                     type: Boolean
@@ -66,6 +71,9 @@
             if (this.debug) console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
             this.invalidNodes = invalidNodes;
             this.isValid = valid;
+            if (!valid && this.autoFocus){
+                invalidNodes[0].focus();
+            }
             return valid;
         }
 
@@ -109,7 +117,7 @@
          * @return A Array of validatable Nodes
          */
         _getValidatableElements(parent) {
-            const validatableElts = this._computeFilterNodes(parent, (el) => {
+            const validatableElts =  FiveElements.AirVisitorNodesUtils.computeFilterNodes(parent, (el) => {
                 if (el.validate) {
                     return true;
                 }
@@ -117,59 +125,6 @@
             });
             return validatableElts;
         }
-
-        // --- Utils
-        // --- ---------------------------
-
-
-        /**
-         * Visist all child nodes of parent in order to find filter nodes
-         * @param parent to visit
-         * @param filter for the nodes
-         * @param levelToVisit Number of child level to visit. -1 means visit all level.
-         * @returns A Array Od filters nodes
-         * @private
-         */
-        _computeFilterNodes(parent, filter, levelToVisit = -1) {
-            const nodes = Array.prototype.slice.call(Polymer.FlattenedNodesObserver.getFlattenedNodes(parent));
-            console.log('parent : ', parent, ' -- level : ', levelToVisit, '-->', nodes);
-            const elements = nodes.reduce((acc, el) => {
-                // Exclude not wanted search
-                // ----------------------------
-                const elTagName = el.tagName;
-                if (!elTagName || elTagName === 'STYLE') {
-                    return acc;
-                }
-                // node with validation method
-                // ----------------------------
-                if (filter(el)) {
-                    acc.push(el);
-                    return acc;
-                }
-                // Determine Parent Type  Open Shadow root or direct Child
-                // ----------------------------
-                let elChild;
-                if (levelToVisit !== 0) {
-                    const shadowNode = el.shadowRoot;
-                    if (shadowNode && (shadowNode.mode === 'open')) {
-                        elChild = shadowNode;
-                    } else {
-                        elChild = el;
-                    }
-                }
-                // Search in Parents
-                // ----------------------------
-                if (elChild) {
-                    const childElt = this._computeFilterNodes(elChild, filter, levelToVisit - 1);
-                    if (childElt && childElt.length > 0) {
-                        acc.push(...childElt);
-                    }
-                    return acc;
-                }
-                return acc;
-            }, []);
-            return elements;
-        };
 
 
         // --- End
