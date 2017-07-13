@@ -52,7 +52,7 @@
         }
 
         // --- Public Api
-        // --- ---------------------------;
+        // --- ---------------------------
         validatePromise() {
             return new Promise((resolve, error) => {
                 const valid = this.validate();
@@ -71,17 +71,43 @@
             if (this.debug) console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
             this.invalidNodes = invalidNodes;
             this.isValid = valid;
+            let invalidNode;
             if (!valid && this.autoFocus){
-                const invalidNode = this.focusInvalidNode(invalidNodes);
+                invalidNode = this.focusInvalidNode(invalidNodes);
             }
+            this._fireValidateEvent(valid, invalidNodes, invalidNode);
             return valid;
         }
 
-        focusInvalidNode(nodeSelected){
-            const invalidNodes = nodeSelected || this.invalidNodes;
+        /**
+         * Focus on a selection of possible nodes
+         * @param selectedNodes a selection of nodes or the this.invalidNodes context is undefined
+         * @return {node} The focused node
+         */
+        focusInvalidNode(selectedNodes){
+            const invalidNodes = selectedNodes || this.invalidNodes;
             const invalidNode = this._selectInvalidNodes(invalidNodes);
             return this._callFocus(invalidNode);
         }
+        // --- Event
+        // --- ---------------------------
+        /**
+         * Fired when a valide method result.
+         *
+         * @event air-validate
+         */
+        _fireValidateEvent(valid, invalidNodes, invalidNode) {
+            const validateEvent = {valid, invalidNodes, invalidNode};
+            this.dispatchEvent(new CustomEvent('air-validate', {
+                detail: validateEvent,
+                bubbles: true,
+                composed: true
+            }));
+            return validateEvent;
+        }
+
+        // --- Utils
+        // --- ---------------------------
 
         _callFocus(node) {
             if (node.focusInvalidNode) {
@@ -98,6 +124,11 @@
             }
             return selected;
         }
+
+
+        // --- Node visitors
+        // --- ---------------------------
+
         /**
          * Validates all the required elements (custom and native) in the form.
          * @return {boolean} True if all the elements are valid.
@@ -126,8 +157,6 @@
         }
 
 
-        // --- Validators iron-form
-        // --- ---------------------------
 
         /**
          * Get Validatable Nodes by Visit all node of the given parent
