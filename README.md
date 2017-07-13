@@ -5,9 +5,31 @@ Air cascade Validator manager the validation of all Nodes inside
 
 
 ## Usage
+<!---
+```
+<custom-element-demo>
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="air-cascade-validator.html">
+    <link rel="import" href="../paper-inputpaper-input.html">
+    <style>
+      paper-input {
+        max-width: 400px;
+        margin: auto;
+      }
+      iron-icon, div[suffix] {
+        color: hsl(0, 0%, 50%);
+        margin-right: 12px;
+      }
+    </style>
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
 
 ```html
-<air-cascade-validator is-valid="{{isValid}}">
+<air-cascade-validator is-valid="{{isValid}}" auto-focus>
   <paper-input label="Firstname" value="{{data.firstname}}" required></paper-input>
   <paper-input label="Lastname" value="{{data.lastname}}" required></paper-input>
   <paper-input label="email" value="{{data.email}}" type="email"></paper-input>
