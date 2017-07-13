@@ -1,7 +1,7 @@
 {
   "name": "air-cascade-validator",
   "private": true,
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A Polymer element that manage Validation Aggregation",
   "main": "air-cascade-validator.html",
   "author": [
