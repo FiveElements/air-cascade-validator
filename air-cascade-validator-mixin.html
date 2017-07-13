@@ -72,22 +72,40 @@
             this.invalidNodes = invalidNodes;
             this.isValid = valid;
             if (!valid && this.autoFocus){
-                invalidNodes[0].focus();
+                const invalidNode = this.focusInvalidNode(invalidNodes);
             }
             return valid;
         }
 
+        focusInvalidNode(nodeSelected){
+            const invalidNodes = nodeSelected || this.invalidNodes;
+            const invalidNode = this._selectInvalidNodes(invalidNodes);
+            return this._callFocus(invalidNode);
+        }
+
+        _callFocus(node) {
+            if (node.focusInvalidNode) {
+                return node.focusInvalidNode();
+            }
+            node.focus();
+            return node;
+        }
+
+        _selectInvalidNodes(invalidNodes) {
+            let selected;
+            if (invalidNodes && invalidNodes.length > 0) {
+                selected= invalidNodes[0];
+            }
+            return selected;
+        }
         /**
          * Validates all the required elements (custom and native) in the form.
          * @return {boolean} True if all the elements are valid.
          */
         getInvalidNodes() {
-//            console.log('validate...');
             if (this.novalidate) {
                 return true;
             }
-            // Start by making the form check the native elements it knows about.
-//            let valid = this._form.checkValidity();
 
             const elements = this._getValidatableElements(this);
             if (this.debug) console.log("Validate elements:", elements);
@@ -98,7 +116,7 @@
 //                // has a validate() method, otherwise we can't check it.
                 let validatable = /** @type {{validate: (function() : boolean)}} */ (el);
                 if (validatable.validate) {
-                    let elValid = validatable.validate();
+                    const elValid = validatable.validate();
                     if (this.debug) console.log('test elements is valid', validatable, '==>', elValid, '=', el.value);
                     return !elValid;
                 }
