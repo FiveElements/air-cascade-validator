@@ -35,7 +35,7 @@
                     notify: true
                 },
                 autoFocus: {
-                  type: Boolean
+                    type: Boolean
                 },
                 debug: {
                     type: Boolean
@@ -63,17 +63,28 @@
 
         /**
          * Validates all the required elements (custom and native) in the form.
+         * @param {function} callback(valid, invalidNodes) { return invalidNode}
          * @return {boolean} True if all the elements are valid.
          */
-        validate() {
+        validate(callback) {
+            const cb = callback || (this.autoFocus ? this.focusInvalidNode.bind(this) : undefined);
+            return this.validateWithCallback(cb);
+        }
+
+        /**
+         * Validates all the required elements (custom and native) in the form.
+         * @param {funcion} callback(valid, invalidNodes) { return invalidNode}
+         * @return {boolean} True if all the elements are valid.
+         */
+        validateWithCallback(callback) {
             const invalidNodes = this.getInvalidNodes();
             const valid = invalidNodes.length < 1;
             if (this.debug) console.log('Form is valid ==> ', valid, '<---- with ----', invalidNodes);
             this.invalidNodes = invalidNodes;
             this.isValid = valid;
             let invalidNode;
-            if (!valid && this.autoFocus){
-                invalidNode = this.focusInvalidNode(invalidNodes);
+            if (callback) {
+                invalidNode = callback(valid, invalidNodes);
             }
             this._fireValidateEvent(valid, invalidNodes, invalidNode);
             return valid;
@@ -84,11 +95,14 @@
          * @param selectedNodes a selection of nodes or the this.invalidNodes context is undefined
          * @return {node} The focused node
          */
-        focusInvalidNode(selectedNodes){
-            const invalidNodes = selectedNodes || this.invalidNodes;
-            const invalidNode = this._selectInvalidNodes(invalidNodes);
-            return this._callFocus(invalidNode);
+        focusInvalidNode(valid, selectedNodes) {
+            if (!valid) {
+                const invalidNodes = selectedNodes || this.invalidNodes;
+                const invalidNode = this._selectInvalidNodes(invalidNodes);
+                return this._callFocus(invalidNode);
+            }
         }
+
         // --- Event
         // --- ---------------------------
         /**
@@ -120,7 +134,7 @@
         _selectInvalidNodes(invalidNodes) {
             let selected;
             if (invalidNodes && invalidNodes.length > 0) {
-                selected= invalidNodes[0];
+                selected = invalidNodes[0];
             }
             return selected;
         }
@@ -157,14 +171,13 @@
         }
 
 
-
         /**
          * Get Validatable Nodes by Visit all node of the given parent
          * @param parent to visit
          * @return A Array of validatable Nodes
          */
         _getValidatableElements(parent) {
-            const validatableElts =  FiveElements.AirVisitorNodesUtils.computeFilterNodes(parent, (el) => {
+            const validatableElts = FiveElements.AirVisitorNodesUtils.computeFilterNodes(parent, (el) => {
                 if (el.validate) {
                     return true;
                 }
