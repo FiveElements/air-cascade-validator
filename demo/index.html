@@ -4,21 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>air-cascade-validator demo</title>
+    <title>demo-app demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <script type="module">
+        import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+        import '@polymer/iron-demo-helpers/demo-snippet';
+        import '@polymer/polymer/lib/elements/dom-bind.js';
 
+        import '@polymer/paper-input/paper-input.js';
+        import '@polymer/paper-button/paper-button.js';
+    </script>
 
-    <link rel="import" href="../air-cascade-validator.html">
-    <link rel="import" href="demo-editor.html">
-    <link rel="import" href="demo-control.html">
-    <link rel="import" href="demo-complex-form.html">
+    <script type="module" src="../air-cascade-validator.js"></script>
+    <script type="module" src="./demo-editor.js"></script>
+    <script type="module" src="./demo-control.js"></script>
+    <script type="module" src="./demo-complex-form.js"></script>
 
-    <link rel="import" href="../../paper-input/paper-input.html">
-    <link rel="import" href="../../paper-button/paper-button.html">
 
     <custom-style>
         <style is="custom-style" include="demo-pages-shared-styles">
@@ -32,8 +35,7 @@
         <dom-bind>
             <template id="demo1">
                 <demo-control onclick="validateDemo1()" is-valid="{{isValid}}"></demo-control>
-
-                <air-cascade-validator id="validator" is-valid="{{isValid}}" debug auto-focus>
+                <air-cascade-validator id="validator" is-valid="{{isValid}}" debug="" auto-focus="">
                     <demo-editor data="{{data}}"></demo-editor>
                 </air-cascade-validator>
             </template>
@@ -43,7 +45,6 @@
             let demo1 = document.querySelector('#demo1');
 
             //            demo1.isValid = true;
-
             function validateDemo1() {
                 let isValid = document.getElementById('validator').validate();
                 demo1.isValid = isValid;
@@ -51,11 +52,13 @@
         </script>
     </demo-snippet>
 </div>
+
 <div class="vertical-section-container centered">
     <h3>Complexe air-cascade-validator demo</h3>
     <demo-snippet>
         <dom-bind>
             <template id="demo2">
+
                 <demo-control onclick="validateDemo2()" is-valid="{{isValid2}}"></demo-control>
 
                 <air-cascade-validator id="validator2" is-valid="{{isValid2}}" debug>
@@ -63,11 +66,11 @@
                 </air-cascade-validator>
             </template>
         </dom-bind>
+
         <script>
             let demo2 = document.querySelector('#demo2');
             //            console.log(demo2);
             //            demo2.isValid2 = true;
-
             function validateDemo2() {
                 let validatorDemo2 = document.getElementById('validator2');
                 let isValid = validatorDemo2.validate();

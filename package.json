@@ -1,8 +1,20 @@
 {
+  "description": "Polymer 2 Element for validate",
+  "keywords": [
+    "web-components",
+    "polymer",
+    "five-elements",
+    "air-elements",
+    "validator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FiveElements/air-cascade-validator.git"
+  },
+  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme",
   "name": "air-cascade-validator",
   "version": "0.0.1",
-  "description": "Polymer 2 Element for validate",
-  "main": "air-cascade-validator.html",
+  "main": "air-cascade-validator.js",
   "directories": {
     "test": "test"
   },
@@ -12,21 +24,31 @@
     "demo": "polymer serve --open",
     "test": "polymer test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/FiveElements/air-cascade-validator.git"
-  },
-  "keywords": [
-    "web-components",
-    "polymer",
-    "five-elements",
-    "air-elements",
-    "validator"
-  ],
   "author": "Five Elements Author",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/FiveElements/air-cascade-validator/issues"
   },
-  "homepage": "https://github.com/FiveElements/air-cascade-validator#readme"
+  "resolutions": {
+    "inherits": "2.0.3",
+    "samsam": "1.1.3",
+    "supports-color": "3.1.2",
+    "type-detect": "1.0.0",
+    "@webcomponents/webcomponentsjs": "2.0.0-beta.2"
+  },
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0"
+  },
+  "devDependencies": {
+    "@polymer/iron-demo-helpers": "^3.0.0-pre.18",
+    "wct-browser-legacy": "^0.0.1-pre.11",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "@polymer/iron-component-page": "^3.0.0-pre.18",
+    "@polymer/paper-input": "^3.0.0-pre.18",
+    "@polymer/paper-button": "^3.0.0-pre.18",
+    "@polymer/paper-styles": "^3.0.0-pre.18",
+    "@polymer/iron-icon": "^3.0.0-pre.18",
+    "@polymer/iron-icons": "^3.0.0-pre.18",
+    "@polymer/paper-toast": "^3.0.0-pre.18"
+  }
 }
